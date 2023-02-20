@@ -155,8 +155,8 @@ export default function DashBoard() {
                     columns={[{
                         dataIndex: "url"
                         , title: "Source Url",
-                        render: (data: String) => {
-                            return <Link href={data} className="text-blue-400">{data}</Link>
+                        render: (data: string) => {
+                            return <a href={data} className="text-blue-400">{data}</a>
                         }
                     },
                     { dataIndex: "ip", title: "IP Address" }
@@ -165,7 +165,7 @@ export default function DashBoard() {
                     {
                         dataIndex: "originalDeposition",
                         title: "Original Deposition",
-                        render: (data: String) => { return <article className={`${data === "Legitimate" ? "text-green-500" : "text-red-400"}`}>{data}</article> }
+                        render: (data: string) => { return <article className={`${data === "Legitimate" ? "text-green-500" : "text-red-400"}`}>{data}</article> }
                     },
                     {
                         dataIndex: "detectionDate",
