@@ -13,13 +13,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='h-screen flex items-center flex-col justify-center gap-4 bg-slate-100 overflow-hidden'>
-        <h1 className='font-bold text-5xl text-black/80 -mt-16'>Welcome</h1>
+        <h1 className='font-bold text-5xl text-black/70 -mt-16'>Welcome</h1>
         <h2 className='font-medium text-2xl text-black/50 mb-4'>This site scans for phishing URLs!!</h2>
         <Form className='w-full' onFinish={(data) => { console.log(data); router.push(`/dashboard`) }}>
           <Row className='flex justify-center' gutter={[24, 0]}>
             <Col span={8}>
               <Form.Item name="phish-site" rules={[{
-                required:true, message:"Please Enter a url to check for phising."
+                required: true, message: "Please Enter a url to check for phising."
               }]}>
                 <Input placeholder='Enter a URL:www.example.com' size='large' />
               </Form.Item>
