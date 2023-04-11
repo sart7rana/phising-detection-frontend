@@ -1,9 +1,13 @@
-import { Form, Input, Row, Button, Col } from 'antd'
+import { Form, Input, Row, Button, Col, message } from 'antd'
 import Head from 'next/head'
 import { useRouter } from 'next/router';
+import {  useState } from 'react';
+import store from "store";
 
 export default function Home() {
   const router = useRouter();
+  const [searchLoading, setSearchLoading] = useState(false);
+
   return (
     <>
       <Head>
@@ -13,19 +17,37 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='h-screen flex items-center flex-col justify-center gap-4 bg-slate-100 overflow-hidden'>
-        <h1 className='font-bold text-5xl text-black/70 -mt-16'>Welcome</h1>
-        <h2 className='font-medium text-2xl text-black/50 mb-4'>This site scans for phishing URLs!!</h2>
-        <Form className='w-full' onFinish={(data) => { console.log(data); router.push(`/dashboard`) }}>
+        <h1 className='font-bold text-8xl text-black/70 -mt-16'>Welcome</h1>
+        <h2 className='font-medium text-3xl text-black/50 mb-4'>This site scans for phishing URLs!!</h2>
+        <Form className='w-full' onFinish={async (data) => {
+          setSearchLoading(true);
+          let result;
+          try {
+            result = await fetch(`http://192.168.11.100:9696/search?url=${encodeURIComponent(data.url)}`)
+            result = await result.json();
+            store.set("searchScan", result);
+            router.push({
+              pathname: `/dashboard`,
+              // query: { data: JSON.stringify(result) }
+            })
+          } catch (error) {
+            console.log(error)
+            message.error("Server Error")
+          } finally {
+            setSearchLoading(false)
+          }
+
+        }}>
           <Row className='flex justify-center' gutter={[24, 0]}>
             <Col span={8}>
-              <Form.Item name="phish-site" rules={[{
-                required: true, message: "Please Enter a url to check for phising."
+              <Form.Item name="url" rules={[{
+                required: true, message: "Please Enter an URL!!!"
               }]}>
                 <Input placeholder='Enter a URL:www.example.com' size='large' />
               </Form.Item>
             </Col>
             <Col>
-              <Button size='large' type='primary' htmlType='submit'><span className='px-8 font-bold'>Scan</span></Button>
+              <Button size='large' type='primary' loading={searchLoading} htmlType='submit'><span className='px-8 font-bold'>Scan</span></Button>
             </Col>
           </Row>
         </Form>
